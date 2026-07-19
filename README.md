@@ -19,7 +19,7 @@ A distributed, S3-compatible object storage system written in Rust — built for
 
 **Distributed S3** is a from-scratch implementation of an S3-compatible object store, designed as a horizontally scalable cluster of storage nodes coordinated by a Raft-backed metadata layer. It targets modern NVMe hardware with `io_uring`-based async I/O, uses Reed–Solomon erasure coding for durability without the storage overhead of full replication, and exposes a standard S3 API surface so existing tooling and SDKs work out of the box.
 
-This project is a learning-and-build exercise in distributed systems engineering — covering consensus, consistent hashing, erasure coding, cluster membership/gossip, rebalancing, and low-level storage I/O — implemented as a set of focused Rust crates in a single workspace.
+<!-- This project is a learning-and-build exercise in distributed systems engineering — covering consensus, consistent hashing, erasure coding, cluster membership/gossip, rebalancing, and low-level storage I/O — implemented as a set of focused Rust crates in a single workspace. -->
 
 ## Architecture
 
