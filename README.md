@@ -30,7 +30,7 @@ A distributed, S3-compatible object storage system written in Rust — built for
 ## Key Features
 
 - **S3-Compatible API** — Bucket and object operations, multipart uploads, and standard auth (SigV4-style) via the `gateway` crate.
-- **Raft-Backed Metadata Cluster** — Strongly consistent object/bucket metadata, versioning, namespace management, and transactional writes.
+- **Raft-Backed Metadata Cluster** — Strongly consistent object/bucket metadata, namespace management, and transactional writes.
 - **Erasure-Coded Storage** — Reed–Solomon erasure coding with configurable stripe/parity for durability at lower overhead than N-way replication.
 - **NVMe-Optimized Storage Nodes** — `io_uring`-based async I/O, checksummed chunk storage, compression, encryption at rest, and local caching.
 - **Consistent-Hash Placement** — Rack-aware object placement and configurable placement policies across the cluster.
@@ -46,9 +46,8 @@ The system is composed of independently deployable services:
 
 | Component | Responsibility |
 |---|---|
-| **Gateway** | Public-facing S3 API: auth, routing, multipart uploads, rate limiting |
-| **Proxy** | Request scheduling and consistent-hash based load balancing across nodes |
-| **Metadata Cluster** | Raft-replicated object/bucket metadata, versioning, transactions, placement decisions |
+| **Gateway** | Public-facing S3 API: auth, routing, multipart uploads, rate limiting, request scheduling, and consistent-hash based load balancing |
+| **Metadata Cluster** | Raft-replicated object/bucket metadata, transactions, placement decisions |
 | **Storage Node** | Owns physical chunk storage, NVMe I/O, checksums, compression, encryption, caching |
 | **Erasure** | Reed–Solomon encode/decode, striping, parity, and recovery |
 | **IAM** | Users, roles, policies, access keys, and STS-style temporary credentials |
@@ -110,21 +109,14 @@ distributed-s3/
 │   │   │   ├── rate_limit/
 │   │   │   ├── metrics/
 │   │   │   ├── handlers/
+│   │   │   ├── scheduler/
+│   │   │   ├── consistent_hash/
+│   │   │   ├── health/
 │   │   │   ├── server.rs
 │   │   │   └── main.rs
 │   │   └── Cargo.toml
 │
-│   #######################################################
-│   ## LOAD BALANCER
-│   #######################################################
-│
-│   ├── proxy/
-│   │   ├── src/
-│   │   │   ├── scheduler.rs
-│   │   │   ├── consistent_hash.rs
-│   │   │   ├── health.rs
-│   │   │   └── main.rs
-│
+
 │   #######################################################
 │   ## METADATA CLUSTER
 │   #######################################################
@@ -135,7 +127,6 @@ distributed-s3/
 │   │   ├── raft/
 │   │   ├── object_metadata/
 │   │   ├── bucket_metadata/
-│   │   ├── object_versioning/
 │   │   ├── object_index/
 │   │   ├── transactions/
 │   │   ├── placement/
