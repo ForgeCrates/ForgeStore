@@ -358,6 +358,9 @@ object that is transfered in chunks will not be accessible at all until fully co
 
 ---
 
+
+<!-- BELOW ARE PENDING -->
+
 ## 19. Start Multipart Upload
 
 ```text
